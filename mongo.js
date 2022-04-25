@@ -11,9 +11,9 @@ const createProduct = async (req, res, next) => {
   const client = new MongoClient(url);
 
     try {
-    await client.connect();
-    const db = client.db();
-    const result = db.collection('products').insertOne(newProduct);
+        await client.connect();
+        const db = client.db();
+        const result = db.collection('products').insertOne(newProduct);
   } catch (error) {
     return res.json({message: 'Could not store data.'});
   };
@@ -24,13 +24,13 @@ const createProduct = async (req, res, next) => {
 
 const getProducts = async (req, res, next) => {
     let products
-    const client = new MongoClient
+    const client = new MongoClient(url)
 
     try {
         await client.connect()
         const db = client.db()
         products = await db.collection('products').find().toArray() //.find here returns an iterable collection of results.
-        // client.close()
+        client.close()
     } catch (error) {
         console.log('error',error)
         return res.json({message: 'Could not retrieve products.'})
