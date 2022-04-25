@@ -10,19 +10,33 @@ const createProduct = async (req, res, next) => {
   };
   const client = new MongoClient(url);
 
-  try {
+    try {
     await client.connect();
     const db = client.db();
     const result = db.collection('products').insertOne(newProduct);
   } catch (error) {
     return res.json({message: 'Could not store data.'});
   };
-//   client.close(); // should be included to close the open connection but might not be necessary actually because sockets are pooled??
+    res.json(newProduct);
+    // client.close(); // should be included to close the open connection but might not be necessary actually because sockets are pooled??
 
-  res.json(newProduct);
 };
 
-const getProducts = async (req, res, next) => {};
+const getProducts = async (req, res, next) => {
+    let products
+    const client = new MongoClient
+
+    try {
+        await client.connect()
+        const db = client.db()
+        products = await db.collection('products').find().toArray() //.find here returns an iterable collection of results.
+        // client.close()
+    } catch (error) {
+        console.log('error',error)
+        return res.json({message: 'Could not retrieve products.'})
+    }
+    res.json(products)
+};
 
 exports.createProduct = createProduct;
 exports.getProducts = getProducts;
