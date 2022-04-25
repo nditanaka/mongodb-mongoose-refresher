@@ -22,4 +22,11 @@ const createProduct = async (req, res, next) => {
     res.json(createdProduct)
 }
 
+const getProducts = async (req, res, next) => {
+    const products = await Product.find().exec() // mongoose find method returns an array by default. exec() returns a promise thus the await.
+    res.json(products)
+}
+
+
 exports.createProduct = createProduct
+exports.getProducts = getProducts
